@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8"/>
+    <title>GitApp</title>
+  </head>
+  <body>
+    <form id="formEl">
+      <input type="text" name="username" id="username"/>
+      <input type="submit" value="Fetch" id="fetch"/>
+    </form>
+
+    <div class="errors"></div>
+    <div class="users"></div>
+
+    <script type="text/jst" id="user_stats">
+      <% if (typeof(errors) !== "undefined") { %>
+        <ul>
+          <% _.each(messages, function(m, i) { %>
+            <li class="error_<%= i %>"><%= m %></li>
+          <% }) %>
+        </ul>
+      <% } else {%>
+      <div class="info">
+        <img src="<%= owner.avatar_url %>" title="avatar_url" class="avatar"/>
+        <a href="<%= owner.html_url%>"><%= owner.login %></a>
+      </div>
+      <table>
+        <% _.each(userdata, function(repo) { %>
+          <tr>
+            <td><a href="<%= repo.html_url %>"><%= repo.name %></a></td>
+            <td><a href="#contributions/<%= repo.contributors.url %>" class="commits">See Contributions</a></td>
+          </tr>
+        <% }) %>
+      <% } %>
+    </script>
+
+    <script type="text/javascript" src="bower_components/underscore/underscore-min.js"></script>
+    <script type="text/javascript" src="bower_components/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="bower_components/backbone/backbone.js"></script>
+    <script type="text/javascript" src="models/user.js"></script>
+    <script type="text/javascript" src="views/user_stats.js"></script>
+    <script type="text/javascript">
+      var userStat = new UserStats();
+    </script>
+  </body>
+</html>

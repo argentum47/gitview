@@ -1,0 +1,25 @@
+.info {
+  width: 200px;
+  text-align: center;
+}
+
+.avatar {
+  width: 60px;
+  height: 60px;
+  display: block;
+}
+
+.errors ul {
+  list-style-type: none;
+}
+
+.list-inline {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+.list-inline li {
+  display: inline;
+  padding-right: 20px;
+}
