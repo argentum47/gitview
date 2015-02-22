@@ -1,4 +1,4 @@
-var Repo = Backbone.Model.extend({
+GitApp.Models.User = Backbone.Model.extend({
   defaults: {
     username: ''
   },
@@ -10,4 +10,9 @@ var Repo = Backbone.Model.extend({
       return errors;
     }
   }
+});
+
+GitApp.Collections.Users = Backbone.Collection.extend({
+  model: GitApp.Models.User,
+  localStorage: new Backbone.LocalStorage('github-users')
 });
