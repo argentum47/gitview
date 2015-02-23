@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8"/>
+    <title>BackboneJS React</title>
+  </head>
+  <body>
+    <div id="app"></div>
+
+    <script type="text/javascript" src="bower_components/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="bower_components/backbone/backbone.js"></script>
+    <script type="text/javascript" src="public/react.min.js"></script>
+    <script type="text/javascript" src="public/JSXTransformer.js"></script>
+
+    <script type="text/jsx">
+      /** @jsx React.DOM */
+
+      var ProfileCard = React.createClass({
+        render: function() {
+          return (
+            <div className = "card">
+              <a href={this.props.profile.get('url')}> WebPage </a>
+              <div className = "user">
+                { this.props.profile.get('name') }
+                <small>{ this.props.profile.get('gender') }</small>
+              </div>
+            </div>
+          );
+        }
+      });
+
+      var ProfileCards = React.createClass({
+        render: function() {
+          var profiles = this.props.profiles.map(function(profile){
+            return <ProfileCard profile={profile} />;
+          })
+          return (
+            <div className="users">
+              <h2>Listing all Profiles</h2>
+              { profiles }
+            </div>
+          );
+      }
+      });
+    </script>
+
+    <script type="text/javascript">
+    window.app = { models: {}, collections: {} };
+
+    app.models.Profile = Backbone.Model.extend({
+      defaults : {
+        name: '',
+        gender: '',
+        url: ''
+      }
+    });
+
+    app.collections.Profiles = Backbone.Collection.extend({
+      model: app.models.Profile
+    });
+
+    app.Router = Backbone.Router.extend({
+      routes : {
+        "profiles": "index",
+        "profiles/:id": "show"
+      }
+    });
+    </script>
+    <script type="text/jsx">
+    /** @jsx React.DOM */
+    var profiles;
+
+    profiles = [
+      {
+        id: 1,
+        name: 'Christopher',
+        gender:  'Male',
+        url: 'http://gitapp.chris.me'
+      },
+      {
+        id: 2,
+        name: 'Bruce',
+        gender: 'Male',
+        url: 'http://gitapp.bruce.me'
+      },
+      {
+        id: 3,
+        name: 'Katie',
+        gender: 'Female',
+        url: 'http://gitapp.katie.me'
+      }];
+
+      app.start = function(data) {
+        var profs = new app.collections.Profiles(data),
+        router = new app.Router();
+        router.on("route:index", function() {
+          React.renderComponent(
+            <ProfileCards profiles={profs} />,
+            document.querySelector("#app")
+          );
+        });
+
+        router.on("route:show", function(id) {
+          var prof = profs.get(id);
+          React.renderComponent(
+            <ProfileCard profile={prof} />,
+            document.querySelector("#app")
+          );
+        });
+
+        Backbone.history.start();
+      };
+
+      app.start(profiles);
+    </script>
+  </body>
+</html>
+<!-- http://facebook.github.io/react/blog/2014/10/14/introducing-react-elements.html
+http://facebook.github.io/react/blog/2014/10/28/react-v0.12.html
+https://medium.com/react-tutorials/react-backbone-router-c00be0cf1592
+https://medium.com/react-tutorials/react-backbone-model-8aaec65a546c
+http://blog.krawaller.se/posts/the-reflux-data-flow-model/ -->
