@@ -2,111 +2,213 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
     <title>GitApp</title>
-    <link rel="stylesheet" type="text/css" href="public/styles.css" />
+    <link rel="stylesheet" type="text/css" href="public/bootstrap.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
   </head>
   <body>
 
-    <!--<form id="formEl"><input type="text" name="username" id="username"/><input type="submit" value="Fetch" id="fetch"/></form>-->
-
     <div class="container"></div>
-
-    <script type="text/jst" id="users-template">
-      <h2 class="page-header text-center">List of contacts</h2>
-      <p class="text-center">
-        <a href="#users/new" class="btn">Add User</a>
-      </p>
-      <ul class="list-inline users-container"></ul>
-    </script>
-
-    <script type="text/jst" id="user-template">
-      <a href="#user/<%= user.username %>"><%= user.username %></a>
-    </script>
-
-    <script type="text/jst" id="new-user-template">
-       <h2 class="page-header text-center"><%= new_user ? "New" : "Edit" %></h2>
-       <form class="form user-form">
-         <div class="form-group">
-           <label for="username"> Username </label>
-           <input type="text" name="username" id="username"/>
-         </div>
-         <button type="submit" class="btn">Add</button>
-       </form>
-    </script>
-
-    <script type="text/jst" id="user-stats">
-      <div class="info clearfix">
-        <img src="<%= owner.avatar_url %>&size=300" title="avatar_url" class="avatar" width="100" height="100"/>
-        <a href="<%= owner.html_url%>"><%= owner.login %></a>
-      </div>
-      <div class="navs">
-        <% _.each(pages, function(page, txt) { %>
-          <span class="label"><a href="#user/<%= owner.login %>/repos/<%= page %>" class="btn btn-blue no-link"><%= txt %></a></span>
-        <% }) %>
-      </div>
-      <div class="users">
-        <% _.each(userdata, function(repo) { %>
-          <div class="boxes">
-            <div class="main"><a href="<%= repo.html_url %>"><%= repo.name %></a></div>
-            <div class="tabs">
-              <a href="#contributions/<%= owner.login %>/<%= repo.name %>" class="tab">Contributions</a>
-            </div>
-          </div>
-          <% }); %>
-      </div>
-    </script>
-
-    <script type="text/jst" id="contribution-template">
-      <% if (typeof errors !== "undefined") { %>
-      <div class="errors"><%= errors.error ? errors.messages : "NetworkError!!" %></div>
-      <% } else { %>
-      <% var ranges = statsRange(_.pluck(stats, 'total')); %>
-      <ul class="chart">
-        <li class="axis">
-          <% _.each(stats, function(stat) { %>
-            <img src="<%= stat.avatar %>?size=30" class="label" width="30" height="30"/>
-          <% }); %>
-        </li>
-        <% _.each(stats, function(stat) { %>
-          <li class="bar" style="height: <%= statWidth(stat.total, ranges) %>%"></li>
-        <% }) %>
-      <% } %>
-    </script>
 
     <script type="text/javascript" src="bower_components/underscore/underscore-min.js"></script>
     <script type="text/javascript" src="bower_components/jquery/jquery.min.js"></script>
     <script type="text/javascript" src="bower_components/backbone/backbone.js"></script>
     <script type="text/javascript" src="public/backbone.localStorage.js"></script>
+    <script type="text/javascript" src="public/react.js"></script>
+    <script type="text/javascript" src="public/JSXTransformer.js"></script>
+    <script type="text/javascript" src="bower_components/react-bootstrap/react-bootstrap.js"></script>
 
-    <script type="text/javascript" src="public/app.js"></script>
-    <script type="text/javascript" src="routes/router.js"></script>
-    <script type="text/javascript" src="models/user.js"></script>
-    <script type="text/javascript" src="views/userForm.js"></script>
-    <script type="text/javascript" src="views/user.js"></script>
-    <script type="text/javascript" src="views/users.js"></script>
-    <script type="text/javascript" src="views/repo.js"></script>
+
+    <script type="text/jsx">
+    /** @jsx React.DOM */
+
+    var Header = React.createClass({
+      render: function() {
+        return (
+          <header className = "navbar navbar-inverse">
+            <div className = "container">
+              <div className = "navbar-header">
+                <a className="navbar-brand"> Gitapp </a>
+              </div>
+              <ul className = "nav navbar-nav">
+                <li> { this.props.content } </li>
+              </ul>
+            </div>
+          </header>
+        );
+      }
+    });
+
+    var NewUser = React.createClass({
+      handleAdd: function() {
+        this.props.onAddUser(this.refs.username.getDOMNode().value)
+      },
+      render: function() {
+        return (
+          <div className = "row">
+            <div className = "col-sm-12 form-horizontal">
+              <div className = "col-sm-9">
+                <input type="text" ref="username" className="form-control"/>
+              </div>
+              <div className = "col-sm-3">
+                <button type="button" className="btn btn-primary" onClick = {this.handleAdd}> Add User</button>
+              </div>
+            </div>
+          </div>
+        );
+      }
+    })
+
+    var User = React.createClass({
+      render: function() {
+        return (
+          <li>
+            <a href={ "#users/" + this.props.user.get('username') }> { this.props.user.get('username') } </a>
+          </li>
+        );
+      }
+    });
+
+    var Users = React.createClass({
+      getInitialState : function() {
+        return {
+          users: this.props.users
+        }
+      },
+      addUser: function(m) {
+        var userCollection = this.props.users,
+        id = userCollection.isEmpty() ? 1 : +(_.max(userCollection.pluck('id')) + 1);
+        m = m.replace(/\s/g, '');
+
+        userCollection.create({id: id, username: m});
+        this.setState({
+          users: userCollection
+        });
+      },
+      render: function() {
+        var users = this.props.users.map(function(user) {
+          return <User user = {user} />
+        });
+
+        return (
+          <div className = "top-container">
+            <Header />
+            <div className = "container">
+              <NewUser onAddUser = { this.addUser }/>
+              <div className = "row">
+                <div className = "col-sm-12">
+                  <h2>Listing Users</h2>
+                </div>
+                <div className = "col-sm-12">
+                  <ul className = "list-inline">
+                    { users }
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      },
+    });
+
+    var Repo = React.createClass({
+      render: function() {
+        return (
+          <div className = "repository"></div>
+        );
+      }
+    });
+
+    var Details = React.createClass({
+      var regex = /(?:page=)(\d+)[^\w]+(?:rel=)"([^"]+)"/g;
+      getInitialState : function() {
+        return {
+          img_url: '',
+
+        }
+      },
+      componentDidMount: function() {
+        $.ajax({
+          type: 'GET',
+          url: 'https://api.github.com/users/' + username + '/repos',
+          data: { page: page || 1 },
+          dataType: 'json'
+        }).done(function(data, sC, $xhr) {
+          if(this.isMounted()) {
+            if(link = $xhr.getResponseHeader('Link')) {
+              while(m = regex.exec(link)) {
+                if(m) pages[m[2]] = m[1];
+              }
+            }
+          }
+        }.bind(this))
+      },
+      render: function() {
+        return (
+          <div className = "content">
+            <div className = "cover">
+            </div>
+            <nav className = "navigation">
+            </nav>
+            <div className = "repos">
+            </div>
+          </div>
+        );
+      }
+    })
+
+    </script>
     <script type="text/javascript">
-      $(function(){
-        GitApp.start();
+      var app = {
+        models: {},
+        collections: {},
+      };
+
+      app.models.User = Backbone.Model.extend({
+        defaults : {
+          username :''
+        }
       });
 
-      function statsRange(data) {
-        var  max = _.max(data);
-        var no_of_divs = Math.ceil((max)/100);
-        var divr = Math.ceil(100/no_of_divs);
-        var divs = [0];
-        for(var i = 1; i <= no_of_divs; i+= 1)
-          divs.push(i * divr);
-        return divs;
-      }
+      app.collections.Users = Backbone.Collection.extend({
+        model: app.models.User,
+        localStorage: new Backbone.LocalStorage('github-users')
+      });
 
-      function statWidth(value, list) {
-        for(var i = 0, len = list.length; i < len; i++)
-          if(value <= list[i])
-            return list[i];
-        return list.pop();
-      }
+      app.Router = Backbone.Router.extend({
+        routes : {
+          "" : "listUsers",
+          "users/:name": "showUser"
+        }
+      });
+    </script>
+
+    <script type="text/jsx">
+    /** @jsx React.DOM */
+      app.start = function() {
+        var users = new app.collections.Users(new Backbone.LocalStorage('github-users').findAll()),
+            routes = new app.Router();
+
+        routes.on("route:listUsers", function() {
+          React.render(
+            <Users users={users} />,
+            document.body
+          );
+        });
+
+        routes.on("route:showUser", function(name) {
+          var user = users.where({ username: name })[0]
+          React.render(
+            <Details user = { user } />,
+            document.body
+          )
+        })
+
+        Backbone.history.start();
+      };
+
+      app.start()
     </script>
   </body>
 </html>

@@ -7,29 +7,22 @@
   <body>
     <div id="app"></div>
 
-    <script type="text/javascript" src="bower_components/underscore/underscore-min.js"></script>
     <script type="text/javascript" src="bower_components/jquery/jquery.min.js"></script>
     <script type="text/javascript" src="bower_components/backbone/backbone.js"></script>
-    <script type="text/javascript" src="public/react.js"></script>
+    <script type="text/javascript" src="public/react.min.js"></script>
     <script type="text/javascript" src="public/JSXTransformer.js"></script>
 
     <script type="text/jsx">
+      /** @jsx React.DOM */
+
       var ProfileCard = React.createClass({
         render: function() {
-          var styles = {
-            display: this.
-          }
           return (
-            <div className="content">
-              <a href="#profiles" style= {"display:" + this.props.show }>Back</a>
-              <div className = "card">
-                <a href={this.props.profile.get('url')}> WebPage </a>
-                <div className = "user">
-                  <a href={ "#profiles/" + this.props.profile.get('id') }>
-                    { this.props.profile.get('name') }
-                  </a>
-                  <small>{ this.props.profile.get('gender') }</small>
-                </div>
+            <div className = "card">
+              <a href={this.props.profile.get('url')}> WebPage </a>
+              <div className = "user">
+                { this.props.profile.get('name') }
+                <small>{ this.props.profile.get('gender') }</small>
               </div>
             </div>
           );
@@ -52,73 +45,73 @@
     </script>
 
     <script type="text/javascript">
-      window.app = { models: {}, collections: {} };
+    window.app = { models: {}, collections: {} };
 
-      app.models.Profile = Backbone.Model.extend({
-        defaults : {
-          name: '',
-          gender: '',
-          url: ''
-        }
-      });
-
-      app.collections.Profiles = Backbone.Collection.extend({
-        model: app.models.Profile
-      });
-
-      app.Router = Backbone.Router.extend({
-      routes : {
-      "profiles": "index",
-      "profiles/:id": "show"
+    app.models.Profile = Backbone.Model.extend({
+      defaults : {
+        name: '',
+        gender: '',
+        url: ''
       }
-      });
-      </script>
+    });
 
-      <script type="text/jsx">
-      var profiles;
+    app.collections.Profiles = Backbone.Collection.extend({
+      model: app.models.Profile
+    });
 
-      profiles = [
-        {
-          id: 1,
-          name: 'Christopher',
-          gender:  'Male',
-          url: 'http://gitapp.chris.me'
-        },
-        {
-          id: 2,
-          name: 'Bruce',
-          gender: 'Male',
-          url: 'http://gitapp.bruce.me'
-        },
-        {
-          id: 3,
-          name: 'Katie',
-          gender: 'Female',
-          url: 'http://gitapp.katie.me'
-        }];
+    app.Router = Backbone.Router.extend({
+      routes : {
+        "profiles": "index",
+        "profiles/:id": "show"
+      }
+    });
+    </script>
+    <script type="text/jsx">
+    /** @jsx React.DOM */
+    var profiles;
+
+    profiles = [
+      {
+        id: 1,
+        name: 'Christopher',
+        gender:  'Male',
+        url: 'http://gitapp.chris.me'
+      },
+      {
+        id: 2,
+        name: 'Bruce',
+        gender: 'Male',
+        url: 'http://gitapp.bruce.me'
+      },
+      {
+        id: 3,
+        name: 'Katie',
+        gender: 'Female',
+        url: 'http://gitapp.katie.me'
+      }];
 
       app.start = function(data) {
         var profs = new app.collections.Profiles(data),
-            router = new app.Router();
+        router = new app.Router();
         router.on("route:index", function() {
-            React.renderComponent(
-              <ProfileCards profiles={profs} />,
-              document.querySelector("#app")
-            );
-          });
+          React.renderComponent(
+            <ProfileCards profiles={profs} />,
+            document.querySelector("#app")
+          );
+        });
 
-          router.on("route:show", function(id) {
-            var prof = profs.get(id);
-            React.renderComponent(
-              <ProfileCard profile={prof} />,
-              document.querySelector("#app")
-            );
-          });
+        router.on("route:show", function(id) {
+          var prof = profs.get(id);
+          React.renderComponent(
+            <ProfileCard profile={prof} />,
+            document.querySelector("#app")
+          );
+        });
 
-          Backbone.history.start();
-        };
+        Backbone.history.start();
+      };
 
-        app.start(profiles);
+      app.start(profiles);
     </script>
   </body>
 </html>

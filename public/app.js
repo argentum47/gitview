@@ -1,3 +1,4 @@
+/**  @jsx React.DOM */
 window.GitApp = {
   Models: {},
   Collections: {},
@@ -15,11 +16,7 @@ window.GitApp = {
     });
 
     router.on('route:listUsers', function() {
-      var usersView = new GitApp.Views.Users({
-        collection: users
-      });
-
-      $('.container').html(usersView.render().$el);
+      React.renderComponent(<Users users={users} />, document.querySelector('.container'))
     });
 
     router.on("route:newUser", function() {
