@@ -1,53 +1,39 @@
-/**  @jsx React.DOM */
-window.GitApp = {
-  Models: {},
-  Collections: {},
-  Views: {},
+var app = app || {};
+app.start = function() {
+  var users = new app.collections.Users(new Backbone.LocalStorage('github-users').findAll()),
+  routes = new app.Router();
 
-  start: function(data) {
-    var users = new GitApp.Collections.Users(new Backbone.LocalStorage('github-users').findAll()),
-        router = new GitApp.Router();
+  routes.on("route:listUsers", function() {
+    React.render(
+      <Users users={users} />,
+      document.body
+    );
+  });
 
-    router.on("route:index", function(){
-      router.navigate('users', {
-        trigger: true,
-        replace: true
-      });
-    });
+  routes.on("route:showUser", function(name, page) {
+    var user = users.where({ username: name })[0];
+    user = user.toJSON();
+    React.render(
+        <Details user = { user } page = { page || 1}/>,
+      document.body
+    )
+  });
 
-    router.on('route:listUsers', function() {
-      React.renderComponent(<Users users={users} />, document.querySelector('.container'))
-    });
+  routes.on("route:showContributions", function(name, repo) {
+    React.render(
+      <Contributions repository = { repo } username = { name } />,
+      document.body
+    );
+  });
 
-    router.on("route:newUser", function() {
-      var newUserForm = new GitApp.Views.NewUserForm({
-        model: new GitApp.Models.User()
-      });
+  routes.on("route:searchUser", function() {
+    React.render(
+      <Search />,
+      document.body
+    );
+  });
 
-      newUserForm.on('form:submitted', function(attrs) {
-        attrs['id'] = users.isEmpty() ? 1 : +(_.max(users.pluck('id')) + 1)
-        attrs.username = attrs.username.replace(/\s/g,'')
-        users.create({id: attrs.id, username: attrs.username});
-        router.navigate('users', true)
-      });
+  Backbone.history.start();
+};
 
-      $('.container').html(newUserForm.render().$el);
-    });
-
-    router.on('route:showUser', function(id, page) {
-      var userView = new GitApp.Views.User({ model: users.where({username: id})[0] });
-
-      $(".container").html(userView.fetchUserStats(page).$el);
-    });
-
-    router.on('route:repoContributions', function(owner, repo) {
-      var repoView = new GitApp.Views.Repo({
-        username: owner,
-        reponame: repo
-      });
-      $('.container').html(repoView.render().$el);
-    });
-
-    Backbone.history.start();
-  }
-}
+app.start();

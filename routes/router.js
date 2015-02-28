@@ -1,9 +1,8 @@
-GitApp.Router = Backbone.Router.extend({
+app.Router = Backbone.Router.extend({
   routes : {
-    "" : "index",
-    "users": "listUsers",
-    "users/new": "newUser",
-    "user/:id(/repos/:page)": "showUser",
-    "contributions/:owner/:repo" : "repoContributions"
+    "" : "listUsers",
+    "users/:name(/:page)": "showUser",
+    "contributions/:name/:repo": "showContributions",
+    "search": "searchUser"
   }
 });

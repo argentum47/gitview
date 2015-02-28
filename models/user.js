@@ -1,4 +1,4 @@
-GitApp.Models.User = Backbone.Model.extend({
+app.models.User = Backbone.Model.extend({
   defaults: {
     username: ''
   },
@@ -12,7 +12,7 @@ GitApp.Models.User = Backbone.Model.extend({
   }
 });
 
-GitApp.Collections.Users = Backbone.Collection.extend({
-  model: GitApp.Models.User,
+app.collections.Users = Backbone.Collection.extend({
+  model: app.models.User,
   localStorage: new Backbone.LocalStorage('github-users')
 });
