@@ -41,9 +41,9 @@ var User = React.createClass({
   },
   render: function() {
     return (
-      <li className="list-group-item">
-          <a href={ "#users/" + this.props.user.get('username') }> { this.props.user.get('username') } </a>
-          <button type="button" className="close" data-id = { this.props.user.get('id')  } onClick = { this.handleDelete }><span aria-hidden="true">&times;</span></button>
+      <li className="list-group-item clearfix">
+        <a href={ "#users/" + this.props.user.get('username') }> { this.props.user.get('username') } </a>
+        <button type="button" className="close" data-id = { this.props.user.get('id')  }  data-dismiss="alert" aria-label="Close" onClick = { this.handleDelete }><span aria-hidden="true">&times;</span></button>
       </li>
     );
   }

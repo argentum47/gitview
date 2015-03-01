@@ -1,17 +1,23 @@
-
 var ContributionGraph = React.createClass({
+
   render : function() {
+    var progress = this.props.stat.progress < 0.3 ? 0.3 : this.props.stat.progress,
+        colors = ["#F00", "#0BF", "#0D5"];
+    var progressStyle = {
+      width: progress + "%",
+      height: "15px",
+      display: "inline-block",
+      backgroundColor: progress < 10 ? colors[0] : (progress < 65 ?  colors[1] : colors[2] )
+    }
+
     return (
       <div className = "col-xs-12">
         <div className = "row">
-          <div className = "col-xs-3">
-            <img src = {this.props.stat.avatar + "&size=50"} className = "col-xs-12"/>
-          </div>
-          <div className = "col-xs-6">
-            { this.props.stat.total }
+          <div className = "col-xs-9">
+            <span style={ progressStyle }></span>
           </div>
           <div className = "col-xs-3">
-            { this.props.stat.username }
+            <img src = {this.props.stat.avatar + "&size=300"} className = "col-xs-12"/>
           </div>
         </div>
       </div>
@@ -33,15 +39,21 @@ var Contributions = React.createClass({
       dataType: 'json'
     }).
     done(function(data, stC, $xhr) {
-      var stats = [];
+      var stats = [],
+          maxScore;
       if($xhr.status == 202) {
         console.log("retrying..");
         setTimeout(this.fetchContributors, 2000)
       }
       if(!data.length <= 0) {
-        for(var i in data) {
-          stats[i] = { id: data[i].author.id, username: data[i].author.login, avatar: data[i].author.avatar_url, total: data[i].total }
-        }
+        maxScore = _.max(data, function(commit) { return commit.total }).total;
+
+        _.each(data, function(commit, i) {
+          stats[i] = { id: commit.author.id, username: commit.author.login, avatar: commit.author.avatar_url, total: commit.total, progress: Math.round10(commit.total * 100 / maxScore, -2) }
+        });
+
+        stats = stats.sort(function(prev, nxt) { return nxt.total - prev.total })
+
         this.setState({
           stats: stats
         });
@@ -65,6 +77,11 @@ var Contributions = React.createClass({
       <div className = "top-container">
         <Header />
         <div className = "container">
+          <div className = "row">
+            <div className = "text-center">
+              <small><em> Plots with respect to maximum number of commits made </em></small>
+            </div>
+           </div>
           <div className = "row">
             { contributions }
           </div>

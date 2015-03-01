@@ -15,11 +15,11 @@ var Navbar = ReactBootstrap.Navbar,
       Nav = ReactBootstrap.Nav;
       var brand = (
         <Link href="#" className="navbar-brand">
-          GitApp
+          GitView
         </Link>
     );
     return (
-      <Navbar brand={brand} inverse  fixedTop toggleNavKey={0}>
+      <Navbar brand={brand} fixedTop toggleNavKey={0}>
         <Nav right eventKey={0}>
           <NavItem eventKey={1} href="#search">Search</NavItem>
         </Nav>
