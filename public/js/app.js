@@ -3,7 +3,7 @@ app.start = function() {
   var users = new app.collections.Users(new Backbone.LocalStorage('github-users').findAll()),
   routes = new app.Router();
 
-  routes.on("route:listUsers", function() {
+  routes.on("route:home", function() {
     React.render(
       <Users users={users} />,
       document.body
@@ -29,6 +29,13 @@ app.start = function() {
   routes.on("route:searchUser", function() {
     React.render(
       <Search />,
+      document.body
+    );
+  });
+
+  routes.on("route:showNotifications", function() {
+    React.render(
+      <Notifications users = {users}/>,
       document.body
     );
   });

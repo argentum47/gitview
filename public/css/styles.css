@@ -1,0 +1,54 @@
+body {
+  padding-top: 70px;
+}
+
+.row {
+  margin-top: 10px;
+}
+
+.close {
+  color: #000;
+}
+
+.close:focus {
+  color: #444;
+}
+
+.close:hover {
+  color: #444;
+}
+
+.red {
+  background-color: #f00;
+}
+
+.blue {
+  background-color: #0bf;
+}
+
+.green {
+  background-color: #0d5;
+}
+
+.progress-status {
+  background-color: #eee;
+  margin-bottom: 10px;
+  padding: 10px 10px;
+}
+.progress-percent {
+  text-align: center;
+}
+
+.progress-width {
+  display: inline-block;
+  height: 25px;
+  vertical-align: middle;
+  transition: width 0.6s ease 0s;
+  width: 86.7%;
+}
+
+.avatar {
+  width: 12%;
+  margin-left: 1%;
+  max-width: 48px;
+}

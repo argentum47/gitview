@@ -3,16 +3,10 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>GitApp</title>
-  <link rel="stylesheet" type="text/css" href="public/bootstrap.css" />
-  <style>
-    body {
-      padding-top: 70px;
-    }
-    .row {
-      margin-top: 10px;
-    }
-  </style>
+  <title>GitView</title>
+  <link rel="stylesheet" type="text/css" href="public/css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="public/css/yeti.min.css" />
+  <link rel="stylesheet" type="text/css" href="public/css/styles.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
@@ -25,15 +19,16 @@
       collections: {}
     };
   </script>
-  <script type="text/javascript" src="bower_components/underscore/underscore-min.js"></script>
-  <script type="text/javascript" src="public/zepto.min.js"></script>
-  <script type="text/javascript" src="bower_components/backbone/backbone.js"></script>
-  <script type="text/javascript" src="public/backbone.localStorage.js"></script>
+  <script type="text/javascript" src="public/js/underscore-min.js"></script>
+  <script type="text/javascript" src="public/js/zepto.min.js"></script>
+  <script type="text/javascript" src="public/js/backbone-min.js"></script>
+  <script type="text/javascript" src="public/js/backbone.localStorage-min.js"></script>
 
-  <script type="text/javascript" src="bower_components/react/react.js"></script>
-  <script type="text/javascript" src="bower_components/react/JSXTransformer.js"></script>
-  <script type="text/javascript" src="bower_components/react-bootstrap/react-bootstrap.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/react/0.12.0/react.js"></script>
+  <script type="text/javascript" src="public/js/JSXTransformer.js"></script>
+  <script type="text/javascript" src="public/js/react-bootstrap/react-bootstrap.min.js"></script>
 
+  <script type="text/javascript" src="public/js/precision.js"></script>
   <script type="text/javascript" src="models/user.js"></script>
   <script type="text/javascript" src="routes/router.js"></script>
   <script type="text/jsx" src="views/interface.jsx"></script>
@@ -41,7 +36,8 @@
   <script type="text/jsx" src="views/users.jsx"></script>
   <script type="text/jsx" src="views/details.jsx"></script>
   <script type="text/jsx" src="views/contributions.jsx"></script>
-  <script type="text/jsx" src="public/app.js"></script>
+  <script type="text/jsx" src="views/notifications.jsx"></script>
+  <script type="text/jsx" src="public/js/app.js"></script>
 
 </body>
 </html>
