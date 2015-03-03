@@ -21,15 +21,13 @@ var NewUser = React.createClass({
 
   render: function() {
     return (
-      <div className = "row">
-        <div className = "col-xs-12 form-horizontal">
-          <div className = "col-xs-8 col-sm-9">
-            <input type="text" ref="username" className="form-control"/>
-          </div>
-          <div className = "col-xs-4 col-sm-3">
-            <button type="button" className="btn btn-primary" onClick = {this.handleAdd}> Add User</button>
-          </div>
+      <div className = "form-inline">
+        <div className = "form-group">
+          <label>
+            <input type="text" ref="username" className="form-control input-xs"/>
+          </label>
         </div>
+        <button type="submit" className="btn btn-primary btn-xs" onClick = {this.handleAdd}> Add User</button>
       </div>
     );
   }
@@ -84,33 +82,63 @@ var Users = React.createClass({
 
   render: function() {
     var errorComp = '',
-        users = this.state.users.map(function(user) {
-          return <User key = { user.id } user = {user} onDelete = {this.deleteUser}/>
-        }.bind(this));
+    users = this.state.users.map(function(user) {
+      return <User key = { user.id } user = {user} onDelete = {this.deleteUser}/>
+    }.bind(this));
 
     if(this.state.errors) {
       errorComp = <Error message = { this.state.errors }/>
     }
+
+    return (
+      <div id = "users" className = "col-xs-12 tab-pane">
+        <div className = "row">
+          <div className = "col-xs-12">
+            <NewUser onAddUser = { this.addUser } onError = {this.errorHandle}/>
+          </div>
+         <div className ="col-xs-12">
+           { errorComp }
+         </div>
+         <div className = "col-xs-12">
+           <ul className = "list-group">
+             { users }
+           </ul>
+         </div>
+       </div>
+     </div>
+    );
+  },
+});
+
+var Home = React.createClass({
+  render: function() {
+    var Nav = ReactBootstrap.Nav,
+        NavItem = ReactBootstrap.NavItem;
     return (
       <div className = "top-container">
         <Header />
         <div className = "container">
-          <NewUser onAddUser = { this.addUser } onError = {this.errorHandle}/>
           <div className = "row">
-            <div className = "col-xs-12">
-              { errorComp }
-            </div>
-            <div className = "col-xs-12">
-              <h2>Listing Users</h2>
-            </div>
-            <div className = "col-xs-12">
-              <ul className = "list-group">
-                { users }
-              </ul>
-            </div>
+            <Nav bsStyle="pills" justified activeKey={1} >
+              <NavItem eventKey={1} href="#users">Users</NavItem>
+              <NavItem eventKey={2} href="#notifications">Notifiations</NavItem>
+            </Nav>
+          </div>
+          <div className = "tabbed-content">
           </div>
         </div>
       </div>
     );
-  },
+  }
 });
+
+// <div className = "tabbable">
+//   <ul className = "nav nav-pills nav-justified">
+//     <li><a href="#notifications">Notifications</a></li>
+//     <li><a href="#users">Users</a></li>
+//   </ul>
+//   <div className = "tab-content">
+//     <Notifications users = { this.props.users } />
+//     <Users users = { this.props.users } />
+//   </div>
+// </div>

@@ -1,25 +1,19 @@
 var ContributionGraph = React.createClass({
 
   render : function() {
-    var progress = this.props.stat.progress < 0.3 ? 0.3 : this.props.stat.progress,
-        colors = ["#F00", "#0BF", "#0D5"];
+    var progress = this.props.stat.progress - 5.3,
+        colors = ["red", "blue", "green"];
+    progress = progress < 6 ? this.props.stat.progress : progress
     var progressStyle = {
-      width: progress + "%",
-      height: "15px",
-      display: "inline-block",
-      backgroundColor: progress < 10 ? colors[0] : (progress < 65 ?  colors[1] : colors[2] )
-    }
+      maxWidth: progress + "%"
+    },
+    progressClass = progress < 20 ? colors[0] : (progress < 60 ?  colors[1] : colors[2] );
 
     return (
-      <div className = "col-xs-12">
-        <div className = "row">
-          <div className = "col-xs-9">
-            <span style={ progressStyle }></span>
-          </div>
-          <div className = "col-xs-3">
-            <img src = {this.props.stat.avatar + "&size=300"} className = "col-xs-12"/>
-          </div>
-        </div>
+      <div className = "col-xs-12 progress-status">
+        <div className = "progress-percent"> {this.props.stat.progress + "%"} </div>
+        <span style={ progressStyle } className = { progressClass + " progress-width" }></span>
+        <img src = {this.props.stat.avatar + "&size=90"} className = "avatar"/>
       </div>
     );
   }
@@ -79,7 +73,7 @@ var Contributions = React.createClass({
         <div className = "container">
           <div className = "row">
             <div className = "text-center">
-              <small><em> Plots with respect to maximum number of commits made </em></small>
+              <small><em> % with respect to max number of commits </em></small>
             </div>
            </div>
           <div className = "row">

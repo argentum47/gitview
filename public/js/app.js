@@ -3,18 +3,25 @@ app.start = function() {
   var users = new app.collections.Users(new Backbone.LocalStorage('github-users').findAll()),
   routes = new app.Router();
 
-  routes.on("route:listUsers", function() {
+  routes.on("route:home", function() {
     React.render(
-      <Users users={users} />,
+      <Home users={users} />,
       document.body
     );
   });
 
+  routes.on("route:users", function() {
+    React.render(
+      <Users users = { users } />,
+      document.querySelector(".tabbed-content")
+    );
+  });
+  
   routes.on("route:showUser", function(name, page) {
     var user = users.where({ username: name })[0];
     user = user.toJSON();
     React.render(
-        <Details user = { user } page = { page || 1}/>,
+      <Details user = { user } page = { page || 1}/>,
       document.body
     )
   });
@@ -30,6 +37,13 @@ app.start = function() {
     React.render(
       <Search />,
       document.body
+    );
+  });
+
+  routes.on("route:showNotifications", function() {
+    React.render(
+      <Notifications users = {users}/>,
+      document.querySelector(".tabbed-content")
     );
   });
 
