@@ -21,13 +21,13 @@ var NewUser = React.createClass({
 
   render: function() {
     return (
-      <div className = "row">
-        <div className = "col-xs-12 form-horizontal">
-          <div className = "col-xs-8 col-sm-9">
+      <div className = "form-horizontal">
+        <div className = "form-group">
+          <div className = "col-xs-8">
             <input type="text" ref="username" className="form-control"/>
           </div>
-          <div className = "col-xs-4 col-sm-3">
-            <button type="button" className="btn btn-primary" onClick = {this.handleAdd}> Add User</button>
+          <div className = "col-sm-offset-2 col-sm-2 col-xs-4">
+            <button type="submit" className="btn btn-primary" onClick = {this.handleAdd}> Add User</button>
           </div>
         </div>
       </div>
@@ -84,33 +84,48 @@ var Users = React.createClass({
 
   render: function() {
     var errorComp = '',
-        users = this.state.users.map(function(user) {
-          return <User key = { user.id } user = {user} onDelete = {this.deleteUser}/>
-        }.bind(this));
+    users = this.state.users.map(function(user) {
+      return <User key = { user.id } user = {user} onDelete = {this.deleteUser}/>
+    }.bind(this));
 
     if(this.state.errors) {
       errorComp = <Error message = { this.state.errors }/>
     }
+
+    return (
+      <div id = "users" className = "col-xs-12 tab-pane">
+        <div className = "row">
+          <div className = "col-xs-12">
+            <NewUser onAddUser = { this.addUser } onError = {this.errorHandle}/>
+          </div>
+         <div className ="col-xs-12">
+           { errorComp }
+         </div>
+         <div className = "col-xs-12">
+           <ul className = "list-group">
+             { users }
+           </ul>
+         </div>
+       </div>
+     </div>
+    );
+  },
+});
+
+var Home = React.createClass({
+  render: function() {
+    var TabbedArea = ReactBootstrap.TabbedArea,
+        TabPane = ReactBootstrap.TabPane;
     return (
       <div className = "top-container">
         <Header />
         <div className = "container">
-          <NewUser onAddUser = { this.addUser } onError = {this.errorHandle}/>
-          <div className = "row">
-            <div className = "col-xs-12">
-              { errorComp }
-            </div>
-            <div className = "col-xs-12">
-              <h2>Listing Users</h2>
-            </div>
-            <div className = "col-xs-12">
-              <ul className = "list-group">
-                { users }
-              </ul>
-            </div>
-          </div>
+          <TabbedArea defaultActiveKey={1}>
+            <TabPane eventKey={1} tab="Users"><Users users = { this.props.users } /></TabPane>
+            <TabPane eventKey={2} tab="Notifications"><Notifications users = { this.props.users }/></TabPane>
+          </TabbedArea>
         </div>
       </div>
     );
-  },
+  }
 });
