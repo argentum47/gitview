@@ -10,13 +10,6 @@ app.start = function() {
     );
   });
 
-  routes.on("route:users", function() {
-    React.render(
-      <Users users = { users } />,
-      document.querySelector(".tabbed-content")
-    );
-  });
-  
   routes.on("route:showUser", function(name, page) {
     var user = users.where({ username: name })[0];
     user = user.toJSON();
@@ -33,9 +26,9 @@ app.start = function() {
     );
   });
 
-  routes.on("route:searchUser", function() {
+  routes.on("route:searchUser", function(q) {
     React.render(
-      <Search />,
+      <Search users = { users } q = {q}/>,
       document.body
     );
   });

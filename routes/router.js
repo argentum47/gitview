@@ -3,6 +3,6 @@ app.Router = Backbone.Router.extend({
     "" : "home",
     "users/:name(/:page)": "showUser",
     "contributions/:name/:repo": "showContributions",
-    "search": "searchUser"
+    "search(/:q)": "searchUser"
   }
 });

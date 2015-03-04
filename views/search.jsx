@@ -1,6 +1,7 @@
 var SearchForm = React.createClass({
-  handleSearch: function() {
-    this.props.onSearch(this.refs.username.getDOMNode().value);
+  handleSearch: function(e) {
+    e.preventDefault();
+    this.props.onSearch(this.props.q || this.refs.username.getDOMNode().value);
   },
   render: function() {
     return (
@@ -10,7 +11,7 @@ var SearchForm = React.createClass({
             <input type="text" ref="username" className="form-control"/>
           </div>
           <div className = "col-xs-4 col-sm-3">
-            <button type="button" className="btn btn-primary" onClick = {this.handleSearch}> Search </button>
+            <a href = "#" role="button" className="btn btn-primary" onClick = {this.handleSearch}> Search </a>
           </div>
         </div>
       </div>
@@ -19,6 +20,10 @@ var SearchForm = React.createClass({
 })
 
 var SearchData = React.createClass({
+  handleAdd: function (e) {
+    e.preventDefault();
+    this.props.onAddUser($(e.target).data('name'))
+  },
   render: function() {
     return (
       <div className = "col-xs-12">
@@ -37,7 +42,7 @@ var SearchData = React.createClass({
             </div>
           </div>
           <div className = "col-xs-3">
-            Add
+            <a href='#' className = "btn btn-primary btn-xs" data-name = {this.props.user.username} onClick = {this.handleAdd}>Add</a>
           </div>
         </div>
       </div>
@@ -76,11 +81,27 @@ var Search = React.createClass({
     });
   },
 
+  addUser: function(m) {
+    var userCollection = this.props.users,
+        results = this.state.data,
+        id = userCollection.isEmpty() ? 1 : +(_.max(userCollection.pluck('id')) + 1);
+        m = m.replace(/\s/g, '');
+
+    userCollection.create({id: id, username: m});
+    results = results.filter(function(data) {
+      return data.username != m;
+    });
+    this.setState({
+      data: results
+    });
+  },
   render: function() {
     var errorComp = '',
+        usernames = this.props.users.pluck('username');
         searchData = this.state.data.map(function(data) {
-          return <SearchData user = {data} />
-        });
+          if(usernames.indexOf(data.username) == -1) return <SearchData user = {data} onAddUser = {this.addUser}/>
+        }.bind(this));
+      console.log(searchData);
 
     if(this.state.errors) {
       errorComp = <Error message = { this.state.errors }/>
@@ -94,7 +115,7 @@ var Search = React.createClass({
             { errorComp }
           </div>
           <div className = "row">
-            <SearchForm onSearch = { this.searchUser } />
+            <SearchForm onSearch = { this.searchUser } q = {this.props.q}/>
           </div>
           <div className = "row">
            { searchData }

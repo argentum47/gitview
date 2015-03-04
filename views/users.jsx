@@ -61,10 +61,6 @@ var Users = React.createClass({
     }
   },
 
-  // componentWillUpdate: function() {
-  //   console.log(this.state.users);
-  //   this.props.handleChange(this.state.users)
-  // },
   addUser: function(m) {
     var userCollection = this.props.users,
         id = userCollection.isEmpty() ? 1 : +(_.max(userCollection.pluck('id')) + 1);
