@@ -22,7 +22,6 @@ var Navbar = ReactBootstrap.Navbar,
       <Navbar brand={brand} fixedTop toggleNavKey={0}>
         <Nav right eventKey={0}>
           <NavItem eventKey={1} href="#search">Search</NavItem>
-          <NavItem eventKey={1} href="#notifications">Notifications</NavItem>
         </Nav>
       </Navbar>
     );

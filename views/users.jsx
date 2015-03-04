@@ -12,7 +12,9 @@ var NewUser = React.createClass({
       this.props.onAddUser(username);
     }.bind(this)).fail(function() {
       this.props.onError("Username doesn't exists");
-    }.bind(this))
+    }.bind(this));
+
+    this.refs.username.getDOMNode().value = "";
   },
 
   handleAdd: function(e) {
@@ -21,13 +23,15 @@ var NewUser = React.createClass({
 
   render: function() {
     return (
-      <div className = "form-inline">
+      <div className = "form-horizontal">
         <div className = "form-group">
-          <label>
-            <input type="text" ref="username" className="form-control input-xs"/>
-          </label>
+          <div className = "col-xs-8 col-sm-8">
+            <input type="text" ref="username" className="form-control"/>
+          </div>
+          <div className = "col-sm-offset-2 col-sm-2 col-xs-4">
+            <button type="submit" className="btn btn-primary" onClick = {this.handleAdd}> Add User</button>
+          </div>
         </div>
-        <button type="submit" className="btn btn-primary btn-xs" onClick = {this.handleAdd}> Add User</button>
       </div>
     );
   }
@@ -41,7 +45,9 @@ var User = React.createClass({
     return (
       <li className="list-group-item clearfix">
         <a href={ "#users/" + this.props.user.get('username') }> { this.props.user.get('username') } </a>
-        <button type="button" className="close" data-id = { this.props.user.get('id')  }  data-dismiss="alert" aria-label="Close" onClick = { this.handleDelete }><span aria-hidden="true">&times;</span></button>
+        <button type="button" className="close" data-id = { this.props.user.get('id')  }  data-dismiss="alert" aria-label="Close" onClick = { this.handleDelete }>
+          &times;
+        </button>
       </li>
     );
   }
@@ -55,15 +61,20 @@ var Users = React.createClass({
     }
   },
 
+  // componentWillUpdate: function() {
+  //   console.log(this.state.users);
+  //   this.props.handleChange(this.state.users)
+  // },
   addUser: function(m) {
     var userCollection = this.props.users,
-    id = userCollection.isEmpty() ? 1 : +(_.max(userCollection.pluck('id')) + 1);
-    m = m.replace(/\s/g, '');
+        id = userCollection.isEmpty() ? 1 : +(_.max(userCollection.pluck('id')) + 1);
+        m = m.replace(/\s/g, '');
 
     userCollection.create({id: id, username: m});
     this.setState({
       users: userCollection
     });
+    this.props.handleChange(this.state.users);
   },
 
   deleteUser: function(id) {
@@ -72,6 +83,7 @@ var Users = React.createClass({
     this.setState({
       users: userCollection
     });
+    this.props.handleChange(this.state.users);
   },
 
   errorHandle: function(msg) {
@@ -83,7 +95,7 @@ var Users = React.createClass({
   render: function() {
     var errorComp = '',
     users = this.state.users.map(function(user) {
-      return <User key = { user.id } user = {user} onDelete = {this.deleteUser}/>
+      return <User key = { user.id } user = {user} onDelete = {this.deleteUser} handleChange = { this.props.handleChange }/>
     }.bind(this));
 
     if(this.state.errors) {
@@ -111,21 +123,27 @@ var Users = React.createClass({
 });
 
 var Home = React.createClass({
+  getInitialState: function() {
+    return {
+      users: this.props.users
+      }
+  },
+  updateUsers: function(users) {
+    this.setState({
+      users: users
+    });
+  },
   render: function() {
-    var Nav = ReactBootstrap.Nav,
-        NavItem = ReactBootstrap.NavItem;
+    var TabbedArea = ReactBootstrap.TabbedArea,
+        TabPane = ReactBootstrap.TabPane;
     return (
       <div className = "top-container">
         <Header />
         <div className = "container">
-          <div className = "row">
-            <Nav bsStyle="pills" justified activeKey={1} >
-              <NavItem eventKey={1} href="#users">Users</NavItem>
-              <NavItem eventKey={2} href="#notifications">Notifiations</NavItem>
-            </Nav>
-          </div>
-          <div className = "tabbed-content">
-          </div>
+          <TabbedArea defaultActiveKey={1}>
+            <TabPane eventKey={1} tab="Users"><Users users = { this.state.users } handleChange = {this.updateUsers}/></TabPane>
+            <TabPane eventKey={2} tab="Notifications"><Notifications users = { this.state.users }/></TabPane>
+          </TabbedArea>
         </div>
       </div>
     );

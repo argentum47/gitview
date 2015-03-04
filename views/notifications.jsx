@@ -93,7 +93,6 @@ var Notification = React.createClass({
           if(this.state.toWatch.indexOf(head.type) > -1) {
             notifiers.push(head)
           }
-          console.log($xhr.response)
         }.bind(this));
 
         this.setState({
@@ -124,12 +123,14 @@ var Notification = React.createClass({
 var Notifications = React.createClass({
   render: function() {
     var allNotifications = this.props.users.map(function(user) {
-      return <Notification username = { user.get('username') }/>
+      return <Notification key = {user.get('id') } username = { user.get('username') }/>
     }.bind(this));
 
     return (
-      <div id = "updates" className = "col-xs-12 tab-pane active">
-        { allNotifications }
+      <div className="row">
+        <div id = "notifications" className = "col-xs-12">
+          { allNotifications }
+        </div>
       </div>
     );
   }
