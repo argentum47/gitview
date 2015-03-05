@@ -1,5 +1,5 @@
 body {
-  padding-top: 70px;
+  padding-top: 50px;
 }
 
 .row {
@@ -63,4 +63,51 @@ body {
 
 .nav-tabs li>a:focus {
   outline: none;
+}
+
+.repo-name {
+  word-wrap: break-word;
+}
+
+.card-container {
+  width: 100%;
+  height: auto;
+  margin-top: -20px;
+  position: relative;
+}
+
+.card {
+  z-index: 2;
+}
+
+.card .user-name {
+  font-weight: bold;
+  font-size: 20px;
+  left: 50px;
+  position: absolute;
+  top: 64px;
+  width: 100%;
+}
+
+.card .details {
+  font-weight: bold;
+  color: #777;
+}
+
+.cover {
+  background-image: radial-gradient(
+    circle at bottom left,
+    #eff,
+    #5ef 20%,
+    #17f
+    );
+    height: 110px;
+}
+
+.user {
+  border-radius: 2%;
+  display: inline-block;
+  margin-top: -30px;
+  margin-left: 10px;
+  width: 100%;
 }
