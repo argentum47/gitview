@@ -104,4 +104,8 @@ a:focus {
 .footer {
     background-color: #e74c3c;
     padding: 13px;
+    position: fixed;
+    bottom: 0;
+    left: 5%;
+    right: 5%;
 }

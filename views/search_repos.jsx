@@ -26,7 +26,7 @@ var SearchRepoForm = React.createClass({
             <input type="text" ref="language" className="form-control"/>
           </div>
           <div className = "col-xs-4 col-sm-3">
-            <a href = "#" role="button" className="btn btn-primary" onClick = {this.handleSearch}> Search </a>
+            <a href = "#" role="button" id="repo-search" className="btn btn-primary" onClick = {this.handleSearch}> Search </a>
           </div>
         </div>
       </div>
@@ -42,7 +42,7 @@ var SearchRepoData = React.createClass({
         <div className = "row">
           <div className = "col-xs-6">
             <div>
-              <a href={"#contributions/" + repo.owner + "/" + repo.name}> { repo.name } </a>
+              <a href={"#contributions/" + repo.name}> { repo.name } </a>
             </div>
             <div> { repo.description } </div>
           </div>
@@ -64,7 +64,8 @@ var SearchRepos = React.createClass({
     return {
       language: '',
       repositories: [],
-      pages: {}
+      pages: {},
+      errors: ''
     }
   },
 
