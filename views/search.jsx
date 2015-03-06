@@ -101,7 +101,6 @@ var Search = React.createClass({
         searchData = this.state.data.map(function(data) {
           if(usernames.indexOf(data.username) == -1) return <SearchData user = {data} onAddUser = {this.addUser}/>
         }.bind(this));
-      console.log(searchData);
 
     if(this.state.errors) {
       errorComp = <Error message = { this.state.errors }/>

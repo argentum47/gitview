@@ -5,14 +5,18 @@ app.start = function() {
 
   routes.on("route:home", function() {
     React.render(
-      <Home users={users} />,
+        <Home users={users} />,
       document.body
     );
   });
 
   routes.on("route:showUser", function(name, page) {
     var user = users.where({ username: name })[0];
-    user = user.toJSON();
+    if(user)
+      user = user.toJSON();
+    else
+      user = {username: name};
+
     React.render(
       <Details user = { user } page = { page || 1}/>,
       document.body

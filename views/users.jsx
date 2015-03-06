@@ -1,54 +1,51 @@
-var NewUser = React.createClass({
-  findThenAdd : function(e) {
-    var username = this.refs.username.getDOMNode().value;
-    $.ajax({
-      type: 'GET',
-      url: 'https://api.github.com/users/' + username,
-      dataType: 'json'
-    }).done(function(data, sC, $xhr) {
-      if($xhr.status == 202) {
-        console.log("retrying..")
-      }
-      this.props.onAddUser(username);
-    }.bind(this)).fail(function() {
-      this.props.onError("Username doesn't exists");
-    }.bind(this));
-
-    this.refs.username.getDOMNode().value = "";
-  },
-
-  handleAdd: function(e) {
-    this.findThenAdd()
-  },
-
-  render: function() {
-    return (
-      <div className = "form-horizontal">
-        <div className = "form-group">
-          <div className = "col-xs-8 col-sm-8">
-            <input type="text" ref="username" className="form-control"/>
-          </div>
-          <div className = "col-sm-offset-2 col-sm-2 col-xs-4">
-            <button type="submit" className="btn btn-primary" onClick = {this.handleAdd}> Add User</button>
-          </div>
-        </div>
-      </div>
-    );
-  }
-});
-
 var User = React.createClass({
+  getInitialState: function(){
+    return {
+      details: {}
+    }
+  },
   handleDelete: function(e) {
     this.props.onDelete($(e.target).data('id'))
   },
+
+  fetchUserDetails: function() {
+    $.ajax({
+      type: 'GET',
+      url: 'https://api.github.com/users/' + this.props.user.get("username") ,
+      dataType: 'json'
+    }).done(function(data, sc,$xhr) {
+      this.setState({
+        details: {username: data.login,
+                  avatar: data.avatar_url,
+                  html_url: data.html_url,
+                  email: data.email}
+      });
+    }.bind(this))
+  },
+
+  componentDidMount: function() {
+    this.fetchUserDetails();
+  },
   render: function() {
+    var avatar = this.state.details.avatar;
     return (
-      <li className="list-group-item clearfix">
-        <a href={ "#users/" + this.props.user.get('username') }> { this.props.user.get('username') } </a>
-        <button type="button" className="close" data-id = { this.props.user.get('id')  }  data-dismiss="alert" aria-label="Close" onClick = { this.handleDelete }>
-          &times;
-        </button>
-      </li>
+      <div className="col-xs-6 col-sm-4 col-md-3">
+        <div className="card-container-xs">
+          <div className="card">
+            <div className="cover">
+              <img className="avatar" width={avatar ? "100": ""} height={avatar ? "100": ""}  src={avatar ? (avatar + "&size=100") : "public/css/loader.GIF"}/>
+              <div className="info">
+                <div className="user-name">
+                  <a href={"#users/" + this.props.user.get("username")}>{this.props.user.get("username")}</a>
+                </div>
+                <div>
+                  <small><a href={this.state.details.html_url}>Profile</a></small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     );
   }
 });
@@ -101,16 +98,13 @@ var Users = React.createClass({
     return (
       <div id = "users" className = "col-xs-12 tab-pane">
         <div className = "row">
-          <div className = "col-xs-12">
-            <NewUser onAddUser = { this.addUser } onError = {this.errorHandle}/>
-          </div>
          <div className ="col-xs-12">
            { errorComp }
          </div>
          <div className = "col-xs-12">
-           <ul className = "list-group">
-             { users }
-           </ul>
+      <div className="row row-centered">
+        { users }
+      </div>
          </div>
        </div>
      </div>
@@ -145,14 +139,3 @@ var Home = React.createClass({
     );
   }
 });
-
-// <div className = "tabbable">
-//   <ul className = "nav nav-pills nav-justified">
-//     <li><a href="#notifications">Notifications</a></li>
-//     <li><a href="#users">Users</a></li>
-//   </ul>
-//   <div className = "tab-content">
-//     <Notifications users = { this.props.users } />
-//     <Users users = { this.props.users } />
-//   </div>
-// </div>

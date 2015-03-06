@@ -1,5 +1,11 @@
 body {
+  background-color: rgb(14, 9, 9);
+}
+
+.top-container {
   padding-top: 50px;
+  min-height: 100vh;
+  background: #222;
 }
 
 .row {
@@ -7,16 +13,24 @@ body {
 }
 
 .close {
-  color: #000;
-}
-
-.close:focus {
+  font-size: 1.625rem;
+  font-weight: bold;
+  line-height: 18px;
   color: #444;
+  text-shadow: 0 1px 0 #ffffff;
+  opacity: 0.2;
+  filter: alpha(opacity=20);
+  text-decoration: none;
 }
 
 .close:hover {
-  color: #444;
+  color: #000000;
+  text-decoration: none;
+  opacity: 0.4;
+  filter: alpha(opacity=40);
+  cursor: pointer;
 }
+
 
 .black {
   background-color: #000;
@@ -39,10 +53,12 @@ body {
 }
 
 .progress-status {
-  background-color: #eee;
+  color: #eee;
+  font-weight: bold;
   margin-bottom: 10px;
   padding: 10px 10px;
 }
+
 .progress-percent {
   text-align: center;
 }
@@ -61,7 +77,7 @@ body {
   max-width: 48px;
 }
 
-.nav-tabs li>a:focus {
+a:focus {
   outline: none;
 }
 
@@ -69,45 +85,22 @@ body {
   word-wrap: break-word;
 }
 
-.card-container {
-  width: 100%;
-  height: auto;
-  margin-top: -20px;
-  position: relative;
+@media(min-width: 768px) {
+  .top-container {
+    width: 85%;
+    margin: 0 auto;
+  }
+
+  .container {
+    width: 100%;
+  }
 }
 
-.card {
-  z-index: 2;
+.row-centered {
+    text-align:center;
 }
 
-.card .user-name {
-  font-weight: bold;
-  font-size: 20px;
-  left: 50px;
-  position: absolute;
-  top: 64px;
-  width: 100%;
-}
-
-.card .details {
-  font-weight: bold;
-  color: #777;
-}
-
-.cover {
-  background-image: radial-gradient(
-    circle at bottom left,
-    #eff,
-    #5ef 20%,
-    #17f
-    );
-    height: 110px;
-}
-
-.user {
-  border-radius: 2%;
-  display: inline-block;
-  margin-top: -30px;
-  margin-left: 10px;
-  width: 100%;
+.footer {
+    background-color: #e74c3c;
+    padding: 13px;
 }

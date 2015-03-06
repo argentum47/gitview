@@ -109,7 +109,7 @@ var Notification = React.createClass({
     var notifications = this.state.notifiers.map(function(data) {
       var idx = this.state.toWatch.indexOf(data.type),
       Event = this.state.components[idx];
-      return <Event data = { data } />
+      return <Event key = {data.id} data = { data } />
     }.bind(this));
 
     return (

@@ -1,0 +1,26 @@
+.nav > li > a, .nav > li > a:hover, .nav > li > a:focus {
+  background: none;
+  border: none; }
+
+.nav-tabs {
+  border-bottom: 1px solid #000; }
+
+.nav-tabs > li > a {
+  background: none;
+  color: #bbb; }
+.nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
+  background: none;
+  border: none;
+  color: #fff; }
+
+.btn-primary {
+  background: #900;
+  border: 0; }
+  .btn-primary:hover, .btn-primary:focus {
+    background: #900;
+    border: 0; }
+
+.list-group-item {
+  border: 0; }
+
+/*# sourceMappingURL=bootstrap_override.css.map */
