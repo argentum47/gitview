@@ -37,6 +37,13 @@ app.start = function() {
     );
   });
 
+  routes.on("route:searchRepos", function(q, page) {
+    React.render(
+      <SearchRepos language = { q } page = { page || 1} />,
+      document.body
+    );
+  });
+
   routes.on("route:showNotifications", function() {
     React.render(
       <Notifications users = {users}/>,

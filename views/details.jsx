@@ -144,11 +144,7 @@ var Details = React.createClass({
           <div className = "row">
             { pages }
           </div>
-         <div className="row row-centered">
-           <div className="footer">
-             Collaborators argentum47 & agnivChandra
-           </div>
-         </div>
+          <Footer />
         </div>
       </div>
     );

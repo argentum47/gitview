@@ -79,6 +79,7 @@ var Contributions = React.createClass({
           <div className = "row">
             { contributions }
           </div>
+          <Footer />
         </div>
       </div>
     );

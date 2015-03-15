@@ -135,6 +135,7 @@ var Home = React.createClass({
             <TabPane eventKey={2} tab="Notifications"><Notifications users = { this.state.users }/></TabPane>
           </TabbedArea>
         </div>
+        <Footer />
       </div>
     );
   }

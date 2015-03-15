@@ -1,0 +1,63 @@
+.card-container-md {
+    width: 100%;
+    height: auto;
+    margin-top: -20px;
+    position: relative;
+
+    .card {
+        z-index: 2;
+        .user-name {
+            font-size: 20px;
+            font-weight: bold;
+            color: #e5f;
+            left: 120px;
+            position: absolute;
+            top: 130px;
+        }
+        .details {
+            font-weight: bold;
+            color: #777;
+        }
+        .cover {
+            background-image: radial-gradient(
+                                      circle at left bottom ,
+                                      #f51 4%, #c10,#b10);
+            height: 110px;
+        }
+
+        .user {
+            border-radius: 2%;
+            display: inline-block;
+            margin-top: -30px;
+            margin-left: 10px;
+            word-wrap: break-word;
+        }
+    }
+}
+
+.card-container-xs {
+    margin: 0 auto;
+    width: 108px;
+    .card {
+        width: 108px;
+        .cover {
+            background: #fff;
+            border-radius: 4px;
+            padding: 4px 0;
+            margin-bottom: 10px;
+            border: 1px solid #000;
+            &>.avatar {
+                width: 100px;
+                margin: 0 auto;
+                max-width: 100px;
+            }
+        }
+
+        .info {
+            .user-name {
+                font-weight: bold;
+                font-size: smaller
+            }
+        }
+    }
+}

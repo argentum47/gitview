@@ -21,9 +21,22 @@ var Navbar = ReactBootstrap.Navbar,
     return (
       <Navbar brand={brand} fixedTop toggleNavKey={0}>
         <Nav right eventKey={0}>
-          <NavItem eventKey={1} href="#search">Search</NavItem>
+          <NavItem eventKey={1} href="#search">Search Users</NavItem>
+          <NavItem eventKey={2} href="#search_repos">Search Repos</NavItem>
         </Nav>
       </Navbar>
+    );
+  }
+});
+
+var Footer = React.createClass({
+  render: function() {
+    return (
+      <div className="row row-centered">
+        <div className="footer">
+          By argentum47
+        </div>
+      </div>
     );
   }
 });

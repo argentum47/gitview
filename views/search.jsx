@@ -119,6 +119,7 @@ var Search = React.createClass({
           <div className = "row">
            { searchData }
           </div>
+          <Footer />
         </div>
       </div>
     );
